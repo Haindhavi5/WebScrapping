@@ -1,0 +1,228 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 11,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Extracted 2 wikitables\n"
+     ]
+    }
+   ],
+   "source": [
+    "from pandas.io.html import read_html\n",
+    "page = 'https://en.wikipedia.org/wiki/New7Wonders_of_the_World'\n",
+    "wikitables = read_html(page,  attrs={\"class\":\"wikitable\"})\n",
+    "\n",
+    "print (\"Extracted {num} wikitables\".format(num=len(wikitables)))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 12,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "                                    Wonder                Location     Year\n",
+      "0  Great Pyramid of Giza (honorary status)  Giza Necropolis, Egypt  2560 BC\n",
+      "1                      Great Wall of China                   China   700 BC\n",
+      "2                                    Petra           Ma'an, Jordan   312 BC\n",
+      "3                                Colosseum             Rome, Italy    80 AD\n",
+      "4                             Chichen Itza         Yucatán, Mexico   600 AD\n"
+     ]
+    }
+   ],
+   "source": [
+    "wikitables[0]=wikitables[0].drop('Image',axis=1)\n",
+    "print(wikitables[0].head())\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 13,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "                Wonder                  Location      Year\n",
+      "0           Stonehenge  Amesbury, United Kingdom  2400 BCE\n",
+      "1  Acropolis of Athens            Athens, Greece   447 BCE\n",
+      "2         Hagia Sophia          İstanbul, Turkey       537\n",
+      "3           Angkor Wat          Angkor, Cambodia      1113\n",
+      "4                 Moai      Easter Island, Chile      1250\n"
+     ]
+    }
+   ],
+   "source": [
+    "wikitables[1]=wikitables[1].drop('Image',axis=1)\n",
+    "print(wikitables[1].head())"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 19,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "<class 'pandas.core.frame.DataFrame'>\n",
+      "RangeIndex: 8 entries, 0 to 7\n",
+      "Data columns (total 3 columns):\n",
+      "Wonder      8 non-null object\n",
+      "Location    8 non-null object\n",
+      "Year        8 non-null object\n",
+      "dtypes: object(3)\n",
+      "memory usage: 272.0+ bytes\n",
+      "<class 'pandas.core.frame.DataFrame'>\n",
+      "RangeIndex: 13 entries, 0 to 12\n",
+      "Data columns (total 3 columns):\n",
+      "Wonder      13 non-null object\n",
+      "Location    13 non-null object\n",
+      "Year        13 non-null object\n",
+      "dtypes: object(3)\n",
+      "memory usage: 392.0+ bytes\n"
+     ]
+    }
+   ],
+   "source": [
+    "wikitables[0].info()\n",
+    "wikitables[1].info()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 33,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "                                    Wonder Location     Year\n",
+      "0  Great Pyramid of Giza (honorary status)    Egypt  2560 BC\n",
+      "1                      Great Wall of China    China   700 BC\n",
+      "2                                    Petra   Jordan   312 BC\n",
+      "3                                Colosseum    Italy    80 AD\n",
+      "4                             Chichen Itza   Mexico   600 AD\n",
+      "5                             Machu Picchu     Peru  1450 AD\n",
+      "6                                Taj Mahal    India  1643 AD\n",
+      "7                      Christ the Redeemer   Brazil  1931 AD\n"
+     ]
+    }
+   ],
+   "source": [
+    "for i in range(0,8):\n",
+    "    x=wikitables[0]['Location'][i].split(\",\")\n",
+    "    wikitables[0]['Location'][i]=x[len(x)-1]\n",
+    "print(wikitables[0])  "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 34,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "                 Wonder         Location      Year\n",
+      "0            Stonehenge   United Kingdom  2400 BCE\n",
+      "1   Acropolis of Athens           Greece   447 BCE\n",
+      "2          Hagia Sophia           Turkey       537\n",
+      "3            Angkor Wat         Cambodia      1113\n",
+      "4                  Moai            Chile      1250\n",
+      "5              Timbuktu             Mali      1327\n",
+      "6              Alhambra            Spain      1333\n",
+      "7            Red Square           Russia      1561\n",
+      "8         Kiyomizu-dera            Japan      1633\n",
+      "9        Neuschwanstein          Germany      1869\n",
+      "10    Statue of Liberty    United States      1886\n",
+      "11         Eiffel Tower           France      1887\n",
+      "12   Sydney Opera House        Australia      1959\n"
+     ]
+    }
+   ],
+   "source": [
+    "for i in range(0,13):\n",
+    "    x=wikitables[1]['Location'][i].split(\",\")\n",
+    "    wikitables[1]['Location'][i]=x[len(x)-1]\n",
+    "print(wikitables[1])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 38,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "RangeIndex(start=0, stop=8, step=1)\n",
+      "                                     Wonder         Location      Year\n",
+      "0   Great Pyramid of Giza (honorary status)            Egypt   2560 BC\n",
+      "1                       Great Wall of China            China    700 BC\n",
+      "2                                     Petra           Jordan    312 BC\n",
+      "3                                 Colosseum            Italy     80 AD\n",
+      "4                              Chichen Itza           Mexico    600 AD\n",
+      "5                              Machu Picchu             Peru   1450 AD\n",
+      "6                                 Taj Mahal            India   1643 AD\n",
+      "7                       Christ the Redeemer           Brazil   1931 AD\n",
+      "0                                Stonehenge   United Kingdom  2400 BCE\n",
+      "1                       Acropolis of Athens           Greece   447 BCE\n",
+      "2                              Hagia Sophia           Turkey       537\n",
+      "3                                Angkor Wat         Cambodia      1113\n",
+      "4                                      Moai            Chile      1250\n",
+      "5                                  Timbuktu             Mali      1327\n",
+      "6                                  Alhambra            Spain      1333\n",
+      "7                                Red Square           Russia      1561\n",
+      "8                             Kiyomizu-dera            Japan      1633\n",
+      "9                            Neuschwanstein          Germany      1869\n",
+      "10                        Statue of Liberty    United States      1886\n",
+      "11                             Eiffel Tower           France      1887\n",
+      "12                       Sydney Opera House        Australia      1959\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(wikitables[0].index)\n",
+    "import pandas as pd\n",
+    "df=pd.concat([wikitables[0],wikitables[1]])\n",
+    "print(df)"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.7.3"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}
